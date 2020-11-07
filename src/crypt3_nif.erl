@@ -1,10 +1,11 @@
 -module(crypt3_nif).
 
 %% API
--export([]).
+-export([encrypt/2]).
 
 %% Native library support
--export([load/0, not_loaded/1]).
+-export([load/0]).
+
 -on_load(load/0).
 
 %%%===================================================================
@@ -15,8 +16,12 @@
 %%% NIF functions
 %%%===================================================================
 
+-spec encrypt(Password :: binary(), Hash :: string()) -> ok.
+encrypt(_Password, _Hash) ->
+    not_loaded(?LINE).
+
 load() ->
-  erlang:load_nif(filename:join(priv(), "libcrypt"), none).
+  erlang:load_nif(filename:join(priv(), "libcrypt3_nif"), none).
 
 %%%===================================================================
 %%% Internal functions

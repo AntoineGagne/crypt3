@@ -1,5 +1,4 @@
 extern crate bincode;
-extern crate pwhash;
 extern crate core;
 extern crate rustler;
 extern crate serde;

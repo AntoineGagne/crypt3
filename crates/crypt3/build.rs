@@ -11,9 +11,9 @@ fn main() {
     let profile = env::var("PROFILE").unwrap();
     // We use target OS to determine if extension is `.so`, `.dll`, or `.dylib`
     let file_name = match env::var("CARGO_CFG_TARGET_OS").unwrap().as_str() {
-        "windows" => "libbloom.dll",
-        "macos" | "ios" => "libbloom.dylib",
-        _ => "libbloom.so",
+        "windows" => "libcrypt3_nif.dll",
+        "macos" | "ios" => "libcrypt3_nif.dylib",
+        _ => "libcrypt3_nif.so",
     };
 
     // Location of libbloom
