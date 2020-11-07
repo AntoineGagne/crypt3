@@ -1,0 +1,20 @@
+{application, crypt3,
+ [{description, "NIF interface for crypt(3)"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {files, [
+           "priv", "src", "crates",
+           "rebar.config", "rebar.lock",
+           "doc", "LICENSE", "README.md"
+          ]},
+  {maintainers, []},
+  {licenses, []},
+  {links, []}
+ ]}.
