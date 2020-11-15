@@ -1,16 +1,14 @@
-use std::io::Write;
-use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
+use rustler::{Binary, Encoder, Env, NifResult, OwnedBinary, Term};
 
-use rustler::resource::ResourceArc;
-use rustler::{Atom, Binary, Encoder, Env, NifResult, OwnedBinary, Term};
-
-use atoms::{error, ok};
+use atoms::{decoding, encoding, error, ok};
+use bindings;
+use bindings::{EncodedField, EncryptionError};
 
 // ============================================================================
 // Resource
 // ============================================================================
 
-pub fn on_load(env: Env, _load_info: Term) -> bool {
+pub fn on_load(_env: Env, _load_info: Term) -> bool {
     true
 }
 
@@ -19,8 +17,19 @@ pub fn on_load(env: Env, _load_info: Term) -> bool {
 // ============================================================================
 
 #[rustler::nif]
-fn encrypt<'a>(env: Env<'a>, _password: String, _hash: String) -> NifResult<Term<'a>> {
-    Ok(ok().encode(env))
+fn encrypt<'a>(env: Env<'a>, password: String, salt: String) -> NifResult<Term<'a>> {
+    match bindings::encrypt(password, salt) {
+        Ok(encrypted) => Ok((ok(), encrypted).encode(env)),
+        Err(e) => match e {
+            EncryptionError::Encoding(EncodedField::Key) => {
+                Ok((error(), (encoding(), "Could not encode key")).encode(env))
+            }
+            EncryptionError::Encoding(EncodedField::Salt) => {
+                Ok((error(), (encoding(), "Could not encode salt")).encode(env))
+            }
+            EncryptionError::Decoding(message) => Ok((error(), (decoding(), message)).encode(env)),
+        },
+    }
 }
 
 // ============================================================================

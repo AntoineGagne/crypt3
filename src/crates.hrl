@@ -1,5 +1,6 @@
 -ifndef(CRATES_HRL).
 -define(CRATES_HRL, 1).
+-define(crate_build-script-build, undefined).
 -define(crate_crypt3_nif, undefined).
 -endif.
 -ifndef(FUNC_CRATES_HRL).
