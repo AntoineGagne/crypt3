@@ -2,7 +2,7 @@ use std::io::Write;
 use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 
 use rustler::resource::ResourceArc;
-use rustler::{Binary, Encoder, Env, NifResult, OwnedBinary, Term};
+use rustler::{Atom, Binary, Encoder, Env, NifResult, OwnedBinary, Term};
 
 use atoms::{error, ok};
 
@@ -19,9 +19,8 @@ pub fn on_load(env: Env, _load_info: Term) -> bool {
 // ============================================================================
 
 #[rustler::nif]
-fn new<'a>(env: Env<'a>, opts: FilterOptions) -> NifResult<Term<'a>> {
-    let filt = Filter::new(opts).map_err(|e| rustler::error::Error::Term(Box::new(e)))?;
-    Ok((ok(), ResourceArc::new(FilterResource::from(filt))).encode(env))
+fn encrypt<'a>(env: Env<'a>, _password: String, _hash: String) -> NifResult<Term<'a>> {
+    Ok(ok().encode(env))
 }
 
 // ============================================================================

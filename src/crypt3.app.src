@@ -8,13 +8,8 @@
    ]},
   {env,[]},
   {modules, []},
-
-  {files, [
-           "priv", "src", "crates",
-           "rebar.config", "rebar.lock",
-           "doc", "LICENSE", "README.md"
-          ]},
-  {maintainers, []},
+  {files, []},
+  {maintainers, ["Antoine Gagné <gagnantoine@gmail.com>"]},
   {licenses, []},
   {links, []}
  ]}.
