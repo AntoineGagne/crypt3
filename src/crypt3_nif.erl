@@ -10,12 +10,17 @@
 
 -on_load(load/0).
 
+-type encryption_error() :: {decoding | encoding, Reason :: binary()}.
+
+-export_type([encryption_error/0]).
+
 %%%===================================================================
 %%% API
 %%%===================================================================
 
--spec encrypt(Password :: binary(), Hash :: string()) -> ok.
-encrypt(_Password, _Hash) ->
+-spec encrypt(Password :: binary(), Salt :: binary()) ->
+    {ok, binary()} | {error, encryption_error()}.
+encrypt(_Password, _Salt) ->
     not_loaded(?LINE).
 
 %%%===================================================================
