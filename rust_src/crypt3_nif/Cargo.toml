@@ -2,14 +2,21 @@
 name = "crypt3_nif"
 version = "0.1.0"
 authors = ["Antoine Gagné <gagnantoine@gmail.com>"]
+build = "build.rs"
+links = "crypt"
 
 [lib]
 name = "crypt3_nif"
 crate-type = ["dylib"]
 
 [dependencies]
+libc = "0.2"
 bincode = "1.2.1"
 crypt3 = "0.1"
 rustler = "0.22.0-rc.0"
 siphasher = "0.3.3"
 serde = { version = "1.0", features = ["derive"] }
+
+[build-dependencies]
+cc = { version = "1.0", features = ["parallel"] }
+pkg-config = "0.3"

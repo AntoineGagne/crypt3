@@ -1,16 +1,13 @@
-use std::io::Write;
-use std::sync::{RwLock, RwLockReadGuard, RwLockWriteGuard};
+use rustler::{Binary, Encoder, Env, NifResult, OwnedBinary, Term};
 
-use rustler::resource::ResourceArc;
-use rustler::{Atom, Binary, Encoder, Env, NifResult, OwnedBinary, Term};
-
-use atoms::{error, ok};
+use atoms::{ok, error, encoding};
+use bindings;
 
 // ============================================================================
 // Resource
 // ============================================================================
 
-pub fn on_load(env: Env, _load_info: Term) -> bool {
+pub fn on_load(_env: Env, _load_info: Term) -> bool {
     true
 }
 
@@ -19,8 +16,12 @@ pub fn on_load(env: Env, _load_info: Term) -> bool {
 // ============================================================================
 
 #[rustler::nif]
-fn encrypt<'a>(env: Env<'a>, _password: String, _hash: String) -> NifResult<Term<'a>> {
-    Ok(ok().encode(env))
+fn encrypt<'a>(env: Env<'a>, password: String, hash: String) -> NifResult<Term<'a>> {
+    match bindings::encrypt(password, hash) {
+        Some(encrypted) => Ok((ok(), encrypted).encode(env)),
+        None => Ok((error(), encoding()).encode(env))
+    }
+    
 }
 
 // ============================================================================

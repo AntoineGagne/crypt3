@@ -3,8 +3,10 @@ extern crate core;
 extern crate rustler;
 extern crate serde;
 extern crate siphasher;
+extern crate libc;
 
 mod atoms;
+mod bindings;
 mod nif;
 
 rustler::init!(
