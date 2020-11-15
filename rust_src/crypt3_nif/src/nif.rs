@@ -1,6 +1,6 @@
 use rustler::{Binary, Encoder, Env, NifResult, OwnedBinary, Term};
 
-use atoms::{ok, error, encoding};
+use atoms::{encoding, error, ok};
 use bindings;
 
 // ============================================================================
@@ -16,12 +16,11 @@ pub fn on_load(_env: Env, _load_info: Term) -> bool {
 // ============================================================================
 
 #[rustler::nif]
-fn encrypt<'a>(env: Env<'a>, password: String, hash: String) -> NifResult<Term<'a>> {
-    match bindings::encrypt(password, hash) {
+fn encrypt<'a>(env: Env<'a>, password: String, salt: String) -> NifResult<Term<'a>> {
+    match bindings::encrypt(password, salt) {
         Some(encrypted) => Ok((ok(), encrypted).encode(env)),
-        None => Ok((error(), encoding()).encode(env))
+        None => Ok((error(), encoding()).encode(env)),
     }
-    
 }
 
 // ============================================================================
