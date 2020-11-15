@@ -1,7 +1,8 @@
 use rustler::{Binary, Encoder, Env, NifResult, OwnedBinary, Term};
 
-use atoms::{encoding, error, ok};
+use atoms::{decoding, encoding, error, ok};
 use bindings;
+use bindings::{EncodedField, EncryptionError};
 
 // ============================================================================
 // Resource
@@ -18,8 +19,16 @@ pub fn on_load(_env: Env, _load_info: Term) -> bool {
 #[rustler::nif]
 fn encrypt<'a>(env: Env<'a>, password: String, salt: String) -> NifResult<Term<'a>> {
     match bindings::encrypt(password, salt) {
-        Some(encrypted) => Ok((ok(), encrypted).encode(env)),
-        None => Ok((error(), encoding()).encode(env)),
+        Ok(encrypted) => Ok((ok(), encrypted).encode(env)),
+        Err(e) => match e {
+            EncryptionError::Encoding(EncodedField::Key) => {
+                Ok((error(), (encoding(), "Could not encode key")).encode(env))
+            }
+            EncryptionError::Encoding(EncodedField::Salt) => {
+                Ok((error(), (encoding(), "Could not encode salt")).encode(env))
+            }
+            EncryptionError::Decoding(message) => Ok((error(), (decoding(), message)).encode(env)),
+        },
     }
 }
 

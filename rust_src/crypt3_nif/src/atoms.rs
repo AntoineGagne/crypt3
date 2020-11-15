@@ -1,5 +1,6 @@
 rustler::atoms! {
     ok,
     error,
-    encoding
+    encoding,
+    decoding
 }

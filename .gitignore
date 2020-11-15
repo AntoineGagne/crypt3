@@ -4,6 +4,7 @@
 *.beam
 *.plt
 erl_crash.dump
+rebar3.crashdump
 .concrete/DEV_MODE
 
 # rebar 2.x
